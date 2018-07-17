@@ -179,12 +179,14 @@ def make_nginx_conf():
         ag_scheme = ag_url_parts.scheme
         ag_netloc = ag_url_parts.netloc
         nginx_conf.append("location /%s/ {" % (ag_netloc))
+        nginx_conf.append("    proxy_cache sdm_zone;")
         nginx_conf.append("    rewrite ^/%s(/.*)$ $1 break;" % (ag_netloc))
         nginx_conf.append("    proxy_pass %s://%s;" % (ag_scheme, ag_netloc))
         nginx_conf.append("    proxy_set_header Host $http_host;")
         nginx_conf.append("    proxy_set_header X-Real-IP $remote_addr;")
         nginx_conf.append("    proxy_set_header X-Scheme $scheme;")
-        # nginx_conf.append("    proxy_redirect off;")
+        nginx_conf.append("    add_header X-Cache-Status $upstream_cache_status;")
+        nginx_conf.append("    proxy_cache_valid any 7d;")
         nginx_conf.append("}")
 
     return nginx_conf

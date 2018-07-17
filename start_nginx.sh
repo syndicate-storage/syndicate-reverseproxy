@@ -18,6 +18,11 @@ NGINX_CONF_SDM_TEMPLATE=/tmp/sdm_reverseproxy.conf.template
 NGINX_CONF_SDM_AVAILABLE=/etc/nginx/sites-available/sdm_reverseproxy.conf
 NGINX_CONF_SDM_ENABLED=/etc/nginx/sites-enabled/sdm_reverseproxy.conf
 
+NGINX_CACHE_DIR=/var/www/nginx/cache
+
+mkdir -p ${NGINX_CACHE_DIR}
+chmod 766 ${NGINX_CACHE_DIR}
+
 origin_server_setter.py > ${NGINX_CONF_ORIGIN_SERVER}
 configure_nginx.py ${NGINX_CONF_SDM_TEMPLATE} ${NGINX_CONF_ORIGIN_SERVER} >| ${NGINX_CONF_SDM_AVAILABLE}
 ln -s ${NGINX_CONF_SDM_AVAILABLE} ${NGINX_CONF_SDM_ENABLED}
